@@ -175,13 +175,13 @@ nct_stuff = {};
 nct_stuff.dynamicOverride = false;
 nct_stuff.themes = {
   tct: {
-    name: "Campaign Trail Showcase",
-    background: "../static/images/backgrounds/tct_background.jpg",
+    name: "True Campaign Trail",
+    background: "../static/images/backgrounds/back.webp",
     banner: "../static/images/banners/tct_banner.png",
-    coloring_window: "#727C96",
-    coloring_container: "#222449",
-    coloring_title: "#3A3360",
-    game_window: "A53545",
+    coloring_window: "#f4a127",
+    coloring_container: "#e5771e",
+    coloring_title: "#75c8ae",
+    game_window: "#ffecb4",
   },
   classic: {
     name: "Classic",
