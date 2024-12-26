@@ -217,6 +217,16 @@ $(document).ready(async function () {
     if (customMods.size > 0) {
       tagsFound.add("Custom");
     }
+    if (document.URL.includes("modjam")) {
+      tagsFound.delete("State");
+      tagsFound.delete("Althist");
+      tagsFound.delete("Historical");
+      tagsFound.delete("International");
+      tagsFound.delete("Funny"); //set.remove does not exist...
+    }
+    else {
+      tagsFound.delete("Modjam"); 
+    }
   });
 
   let allModsLength = mods.length - 1;
@@ -282,7 +292,6 @@ $(document).ready(async function () {
 
         modList.push(modView);
       }
-      updateModViews();
     }
   });
 
@@ -354,9 +363,8 @@ function createModView(mod, imageUrl, description, isCustom) {
     <div class="mod-title" ${theme ? `style="background-color:${theme.header_color};"` : ""}>
         <p ${theme ? `style="color:${theme.header_text_color};"` : ""}>${mod.innerText}</p>
     </div>
-    <div class = "mod-img-desc">
     <img class="mod-image" src="${imageUrl}"></img>
-    <div ${theme ? `style="background-color:${theme.description_background_color}; color:${theme.description_text_color};"` : ""} class="mod-desc" >${description}</div></div>
+    <div ${theme ? `style="background-color:${theme.description_background_color}; color:${theme.description_text_color};"` : ""} class="mod-desc" >${description}</div>
     <div class="hover-button-holder">
         <button ${theme ? `style="background-color:${theme.secondary_color};"` : ""} class="mod-play-button hover-button" onclick="loadModFromButton(\`${mod.value}\`)"><span ${theme ? `style="color:${theme.ui_text_color};"` : ""}>${PLAY}</span></button>
         <button ${theme ? `style="background-color:${theme.secondary_color};"` : ""} class="hover-button" onclick="toggleFavorite(event, \`${mod.value}\`)"><span ${theme ? `style="color:${theme.ui_text_color};"` : ""}>${favText}</span></button>
@@ -424,7 +432,6 @@ function configureRatingButtons(modName, modView) {
   }
 }
 
-
 function addCustomModButton() {
   const code1 = document.getElementById("codeset1").value;
   const code2 = document.getElementById("codeset2").value;
@@ -460,21 +467,15 @@ function addCustomMod(code1, code2) {
   location.reload();
 }
 
-function filterMods(event) {
-  nameFilter = event.target.value.toLowerCase();
-  updateModViews();
-}
-
 function createTagButtons(tagsFound) {
   const tagsGrid = document.getElementById("tags");
   Array.from(tagsFound)
     .sort()
     .forEach(function (tag) {
       const tagButton = document.createElement("div");
-
       tagButton.classList.add("tag-button");
       tagButton.innerHTML = `
-        <input type="checkbox" id="${tag}" name="${tag}" value="${tag}" checked>
+      <input type="checkbox" id="${tag}" name="${tag}" value="${tag}" checked>
         <label style="user-select:none" for="${tag}">${tag.replaceAll("_", " ")}</label><br>
         `;
       tagsGrid.appendChild(tagButton);
@@ -570,7 +571,6 @@ function setCategory(event, category) {
     onlyFavorites = true;
   }
 
-  updateModViews();
 }
 
 function toggleFavorite(event, modValue) {
@@ -578,14 +578,11 @@ function toggleFavorite(event, modValue) {
   if (!inFavorites) {
     favoriteMods.add(modValue);
     event.target.innerText = UNFAV;
-    toggleFav(event, modValue, 1);
   } else {
     favoriteMods.delete(modValue);
     event.target.innerText = FAV;
-    toggleFav(event, modValue, -1);
   }
   localStorage.setItem("favoriteMods", Array.from(favoriteMods));
-  updateModViews();
 }
 
 function loadRandomMod() {
@@ -595,7 +592,6 @@ function loadRandomMod() {
 
 async function loadModFromButton(modValue) {
   if (modValue == "0000Random_Mod") {
-    setTimeout(() => updateModViewCount(modValue), 10000);
     loadRandomMod();
     return;
   }
@@ -635,7 +631,6 @@ async function loadModFromButton(modValue) {
     announcement.style.display = "none";
   }
 
-  setTimeout(() => updateModViewCount(modValue), 10000);
   window.scrollTo(0, 0); // Scroll to top
 }
 
@@ -648,19 +643,6 @@ async function copyModLink() {
 
   await window.navigator.clipboard.writeText(modLink);
   alert("Copied link to clipboard!");
-}
-
-async function updateModViewCount(modName) {
-  if (customMods.has(modName)) return;
-
-  await fetch("https://cts-backend-w8is.onrender.com/api/play_mod", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ modName: modName }),
-  });
 }
 
 function getAllIndexes(arr, val) {
@@ -755,5 +737,4 @@ function setMode(evt, newMode) {
   }
   evt.target.classList.add("pressed");
   mode = newMode;
-  updateModViews();
 }
