@@ -65,14 +65,18 @@
 }
 .mod-desc {
     flex: 1;
-  height: auto;
+  height: 100%;
+  overflow-y: scroll;
     text-align: center;
     font-size: 12px;
-    width: 89%;
+    width: 90%;
     margin: 5px auto;
     border-radius: 5px;
     padding: 5px;
-    overflow-y: clip;
+}
+
+.mod-desc > * {
+  overflow-y: hidden!important;
 }
 
 .tag-button {
