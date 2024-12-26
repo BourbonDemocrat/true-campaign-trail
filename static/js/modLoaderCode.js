@@ -366,8 +366,6 @@ function createModView(mod, imageUrl, description, isCustom) {
       !customMods.has(mod.value)
         ? `
     <div ${theme ? `style="background-color:${theme.secondary_color};"` : ""} class="rating-background">
-        <div ${theme ? `style="color:${theme.ui_text_color};"` : ""} class="modRating">LOADING FAVORITES...</div>
-        <div ${theme ? `style="color:${theme.ui_text_color};"` : ""} class="modPlayCount">LOADING PLAYS...</div>
         ${mod.dataset.awards != null && mod.dataset.awards.length > 0 ? renderAwards(mod.dataset.awards, mod.dataset.awardimageurls) : ""}
     </div>`
         : ""
@@ -379,8 +377,6 @@ function createModView(mod, imageUrl, description, isCustom) {
   }
 
   modView.id = mod.value;
-
-  getFavsAndPlayCount(mod.value, modView);
 
   return modView;
 }
@@ -428,51 +424,6 @@ function configureRatingButtons(modName, modView) {
   }
 }
 
-async function getFavsAndPlayCount(modName, modView) {
-  if (customMods.has(modName)) return;
-
-  try {
-    const res = await fetch(
-      "https://cts-backend-w8is.onrender.com/api/get_mod?modName=" + modName,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    const ratingData = await res.json();
-    modView.getElementsByClassName("modRating")[0].innerHTML =
-      `<span style="font-weight:bold">${ratingData.favs} FAVORITES</span>`;
-    modView.getElementsByClassName("modPlayCount")[0].innerHTML =
-      `<span style="font-weight:bold">${ratingData.playCount ?? 0} PLAYS</span>`;
-    modView.dataset.favs = ratingData.favs;
-    modView.dataset.playCount = ratingData.playCount ?? 0;
-  } catch {
-    modView.getElementsByClassName("modRating")[0].innerHTML =
-      "Failed to get mod info. Try again later.";
-    modView.getElementsByClassName("modPlayCount")[0].innerHTML = ``;
-    modView.dataset.playCount = 0;
-    modView.dataset.favs = 0;
-  }
-}
-
-async function toggleFav(event, modName, favVal) {
-  if (customMods.has(modName)) return;
-
-  await fetch("https://cts-backend-w8is.onrender.com/api/rate_mod", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ modName: modName, rating: favVal }),
-  });
-
-  const modView = document.getElementById(modName);
-  await getFavsAndPlayCount(modName, modView);
-}
 
 function addCustomModButton() {
   const code1 = document.getElementById("codeset1").value;
