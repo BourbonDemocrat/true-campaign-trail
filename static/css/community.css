@@ -375,21 +375,21 @@
   text-decoration: none;
   outline: none;
   color: #ffffff;
-  background-color: rgb(85, 111, 176);
+  background-color: rgb(17, 200, 174);
   border: none;
   border-radius: 10px;
   margin: 5px;
   padding: 10px 10px;
 }
 
-.mode-button:hover {background-color: rgb(76, 98, 154);}
+.mode-button:hover {background-color: rgb(128, 238, 221);}
 
 .mode-button:active {
-  background-color: rgb(53, 70, 113);
+  background-color: rgb(168, 243, 232);
 }
 
 .pressed {
-  background-color: rgb(53, 70, 113)!important;
+  background-color: rgb(11, 119, 103)!important;
 }
 
 /* Tooltip container */
