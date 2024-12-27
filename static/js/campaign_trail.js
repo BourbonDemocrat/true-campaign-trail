@@ -131,10 +131,10 @@ function histFunction() {
   if (modded == false) {
     switch (campaignTrail_temp.election_id) {
       case 21: // 2020
-        HistHexcolour = ["#0000FF", "#FF0000", "#FFFF00", "#00C100"];
+        HistHexcolour = ["#FF0000", "#0000FF", "#FFFF00", "#00C100"];
         HistName = [
-          "Joe Biden",
           "Donald Trump",
+          "Joe Biden",
           "Jo Jorgensen",
           "Howie Hawkins",
         ];
